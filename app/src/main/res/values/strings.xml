@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Chatoora</string>
+    <string name="send_button_name">Отправить</string>
+    <string name="write_text_field">Введите сообщение</string>
 </resources>
