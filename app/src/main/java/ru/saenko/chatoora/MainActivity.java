@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     Button sendMessageButton;
     RecyclerView messagesRecycler;
 
+    DataAdapter dataAdapter;
+
     ArrayList<String> messages = new ArrayList<>(100);
 
     @Override
@@ -36,13 +38,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        InputTextCreation();
+        InitialVariablesMethod();
 
         myRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 String message = snapshot.getValue(String.class);
                 messages.add(message);
+                dataAdapter.notifyDataSetChanged();
+                messagesRecycler.smoothScrollToPosition(messages.size());
             }
 
             @Override
@@ -67,14 +71,16 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void InputTextCreation() {
+    private void InitialVariablesMethod() {
         editTextMessage = findViewById(R.id.message_input_text);
         sendMessageButton = findViewById(R.id.send_message_button);
         messagesRecycler = findViewById(R.id.messages_recycler);
 
         messagesRecycler.setLayoutManager(new LinearLayoutManager(this));
 
-        //messagesRecycler.setAdapter();
+        dataAdapter = new DataAdapter(this, messages);
+
+        messagesRecycler.setAdapter(dataAdapter);
 
         sendMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
